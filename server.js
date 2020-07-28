@@ -1,13 +1,33 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+const request = require('request')
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+app.use(bodyParser.urlencoded({ extended: true }))
 
-let apiKey = process.env.API_KEY
-let city = 'portland'
+const port = process.env.PORT || 5000
+
+let apiKey = process.env.APIKEY
+
+let city = 'hosur'
 let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
 
-app.listen(PORT, () => {
-    console.log(`Server is running in ${PORT}`)
+app.get('/', (req, res) => {
+    console.log('At the root of app')
+})
+
+app.post('/api/weather', (req, res) => {
+    request(url, function (error, response, body) {
+        let weather = body
+        if (error && response.statusCode != 200) {
+            throw error
+        }
+        let weatherText = `It's ${weather}!`
+        console.log({ weatherText })
+    })
+})
+
+app.listen(port, () => {
+    console.log(`Server is running in ${port}`)
 })

@@ -4,6 +4,8 @@ const request = require('request')
 require('dotenv').config()
 
 const app = express()
+app.set('view engine', 'ejs')
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 5000
@@ -14,7 +16,7 @@ let city = 'hosur'
 let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
 
 app.get('/', (req, res) => {
-    console.log('At the root of app')
+    res.render('index')
 })
 
 app.post('/api/weather', (req, res) => {
